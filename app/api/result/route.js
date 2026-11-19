@@ -85,7 +85,7 @@ export async function POST(request) {
 
     for (const result of results) {
       const courseParams = new URLSearchParams({
-        select: 'course_code,course_title,class_test,midterm,final_exam,total,letter_grade',
+        select: select: 'course_code,course_title,class_test,midterm,midterm_status,final_exam,total,letter_grade',,
         result_id: `eq.${result.id}`,
         order: 'course_code.asc',
       });
