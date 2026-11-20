@@ -3,7 +3,7 @@ export async function POST(request) {
   try {
     const { studentId } = await request.json();
 
-    if (!studentId || !studentId.trim()) {
+    if (!studentId || !String(studentId).trim()) {
       return Response.json(
         { error: "Please enter your Student ID." },
         { status: 400 }
@@ -15,7 +15,6 @@ export async function POST(request) {
 
     if (!supabaseUrl || !secretKey) {
       console.error("Supabase environment variables are missing.");
-
       return Response.json(
         { error: "Server configuration error." },
         { status: 500 }
@@ -26,20 +25,18 @@ export async function POST(request) {
       apikey: secretKey,
     };
 
-    // Step 1: Find the student
+    // Find the student in Intake 64, Section 4
     const studentParams = new URLSearchParams({
       select: "id,student_id,full_name,intake,section,program",
-      student_id: `eq.${studentId.trim()}`,
+      student_id: `eq.${String(studentId).trim()}`,
+      intake: "eq.64",
+      section: "eq.4",
       limit: "1",
     });
 
     const studentResponse = await fetch(
       `${supabaseUrl}/rest/v1/students?${studentParams}`,
-      {
-        method: "GET",
-        headers,
-        cache: "no-store",
-      }
+      { headers, cache: "no-store" }
     );
 
     if (!studentResponse.ok) {
@@ -48,7 +45,7 @@ export async function POST(request) {
 
     const students = await studentResponse.json();
 
-    if (students.length === 0) {
+    if (!students.length) {
       return Response.json(
         { error: "Student ID not found." },
         { status: 404 }
@@ -57,21 +54,17 @@ export async function POST(request) {
 
     const student = students[0];
 
-    // Step 2: Find published semester results
+    // Retrieve Fall 2026 results, including draft records
     const resultParams = new URLSearchParams({
-      select: "id,semester,cgpa,status,published_at",
+      select: "id,semester,status",
       student_id: `eq.${student.id}`,
-      status: "eq.published",
+      semester: "eq.Fall 2026",
       order: "created_at.desc",
     });
 
     const resultResponse = await fetch(
       `${supabaseUrl}/rest/v1/semester_results?${resultParams}`,
-      {
-        method: "GET",
-        headers,
-        cache: "no-store",
-      }
+      { headers, cache: "no-store" }
     );
 
     if (!resultResponse.ok) {
@@ -80,24 +73,19 @@ export async function POST(request) {
 
     const results = await resultResponse.json();
 
-    // Step 3: Find course marks for each result
     const resultsWithCourses = [];
 
     for (const result of results) {
       const courseParams = new URLSearchParams({
         select:
-          "course_code,course_title,class_test,midterm,midterm_status,final_exam,total,letter_grade",
+          "course_code,course_title,midterm,midterm_status",
         result_id: `eq.${result.id}`,
         order: "course_code.asc",
       });
 
       const courseResponse = await fetch(
         `${supabaseUrl}/rest/v1/course_marks?${courseParams}`,
-        {
-          method: "GET",
-          headers,
-          cache: "no-store",
-        }
+        { headers, cache: "no-store" }
       );
 
       if (!courseResponse.ok) {
@@ -112,7 +100,6 @@ export async function POST(request) {
       });
     }
 
-    // Step 4: Return student information and results
     return Response.json({
       student,
       results: resultsWithCourses,
