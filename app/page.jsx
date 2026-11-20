@@ -68,13 +68,11 @@ export default function Home() {
 
       setSelected(data);
       setSearched(true);
-
     } catch (err) {
       setError(
         err.message || 'Something went wrong.'
       );
       setSearched(true);
-
     } finally {
       setLoading(false);
     }
@@ -88,13 +86,8 @@ export default function Home() {
   }
 
   function displayMidterm(course) {
-    if (course.midterm_status === 'absent') {
-      return 'Absent';
-    }
-
-    if (course.midterm_status === 'not_on_sheet') {
-      return 'Not on sheet';
-    }
+    if (course.midterm_status === 'absent') return 'Absent';
+    if (course.midterm_status === 'not_on_sheet') return 'Not on sheet';
 
     if (
       course.midterm === null ||
@@ -112,7 +105,6 @@ export default function Home() {
       <div className="topbar">
         <div className="topbar-inner">
           <span>Academic Information Portal</span>
-
           <span className="topbar-right">
             <span className="status-dot" />
             Fall 2026 · Intake 64 · Section 4
@@ -124,28 +116,19 @@ export default function Home() {
         <div className="header-inner">
           <div className="brand">
             <div className="brand-mark">B</div>
-
             <div>
               <div className="brand-name">
                 BUBT <span>RESULT PORTAL</span>
               </div>
-
               <div className="brand-sub">
                 STUDENT ACADEMIC SERVICES
               </div>
             </div>
           </div>
-
           <div className="header-tag">
-            <ShieldCheck size={16} />
-            Section 4 student access
+            <ShieldCheck size={16} /> Section 4 student access
           </div>
-
-          <button
-            className="mobile-menu"
-            aria-label="Menu"
-            type="button"
-          >
+          <button className="mobile-menu" aria-label="Menu" type="button">
             <Menu size={22} />
           </button>
         </div>
@@ -157,31 +140,19 @@ export default function Home() {
             <span className="eyebrow-line" />
             STUDENT RESULT SERVICES
           </div>
-
           <h1>
             Your academic progress,
             <br />
             <em>all in one place.</em>
           </h1>
-
           <p className="hero-copy">
-            Access your course-wise midterm examination
-            marks for Fall 2026.
+            Access your course-wise midterm examination marks for Fall 2026.
           </p>
-
           <div className="hero-meta">
-            <span>
-              <GraduationCap size={17} />
-              BBA Programme
-            </span>
-
-            <span>
-              <BookOpen size={17} />
-              Intake 64 · Section 4
-            </span>
+            <span><GraduationCap size={17} /> BBA Programme</span>
+            <span><BookOpen size={17} /> Intake 64 · Section 4</span>
           </div>
         </div>
-
         <div className="hero-decoration">
           <div className="deco-circle circle-one" />
           <div className="deco-circle circle-two" />
@@ -193,54 +164,33 @@ export default function Home() {
         <div className="lookup-card">
           <div className="card-heading">
             <div>
-              <div className="section-kicker">
-                RESULT LOOKUP
-              </div>
-
+              <div className="section-kicker">RESULT LOOKUP</div>
               <h2>Find your result</h2>
-
-              <p>
-                Enter your student ID to view your midterm marks.
-              </p>
+              <p>Enter your student ID to view your midterm marks.</p>
             </div>
-
-            <div className="lookup-icon">
-              <Search size={23} />
-            </div>
+            <div className="lookup-icon"><Search size={23} /></div>
           </div>
 
           <form onSubmit={lookup} className="search-form">
-            <label htmlFor="student-id">
-              STUDENT ID
-            </label>
-
+            <label htmlFor="student-id">STUDENT ID</label>
             <div className="input-row">
               <div className="input-wrap">
                 <Search size={18} />
-
                 <input
                   id="student-id"
                   value={studentId}
-                  onChange={e =>
-                    setStudentId(e.target.value)
-                  }
+                  onChange={e => setStudentId(e.target.value)}
                   placeholder="Enter your Student ID"
                   autoComplete="off"
                   required
                   disabled={loading}
                 />
               </div>
-
-              <button
-                className="search-button"
-                type="submit"
-                disabled={loading}
-              >
+              <button className="search-button" type="submit" disabled={loading}>
                 {loading ? 'Checking...' : 'Check result'}
                 <ArrowUpRight size={17} />
               </button>
             </div>
-
             <div className="form-hint">
               <ShieldCheck size={14} />
               Enter your registered Student ID.
@@ -248,60 +198,38 @@ export default function Home() {
           </form>
 
           {searched && error && (
-            <div className="error-message" role="alert">
-              {error}
-            </div>
+            <div className="error-message" role="alert">{error}</div>
           )}
         </div>
 
         {selected && (
-          <section
-            className="result-panel"
-            aria-live="polite"
-          >
+          <section className="result-panel" aria-live="polite">
             <div className="result-top">
               <div>
-                <div className="section-kicker">
-                  MIDTERM STATEMENT
-                </div>
-
+                <div className="section-kicker">MIDTERM STATEMENT</div>
                 <h2>Midterm result</h2>
-
                 <p>
-                  Fall 2026 · Intake {selected.student.intake}
-                  {' · '}
-                  Section {selected.student.section}
+                  Fall 2026 · Intake {selected.student.intake} · Section {selected.student.section}
                 </p>
               </div>
-
               <span className="published">
-                <span />
-                Midterm record
+                <span /> Midterm record
               </span>
             </div>
 
             <div className="student-details">
               <div>
                 <span>STUDENT NAME</span>
-                <strong>
-                  {selected.student.full_name}
-                </strong>
+                <strong>{selected.student.full_name}</strong>
               </div>
-
               <div>
                 <span>STUDENT ID</span>
-                <strong>
-                  {selected.student.student_id}
-                </strong>
+                <strong>{selected.student.student_id}</strong>
               </div>
-
               <div>
                 <span>PROGRAMME</span>
-                <strong>
-                  {selected.student.program}
-                </strong>
+                <strong>{selected.student.program}</strong>
               </div>
-
               <div>
                 <span>SEMESTER</span>
                 <strong>Fall 2026</strong>
@@ -314,13 +242,11 @@ export default function Home() {
                 <strong>Midterm</strong>
                 <small>Fall 2026 examination</small>
               </div>
-
               <div className="stat-box">
                 <span>COURSES</span>
                 <strong>{courses.length}</strong>
                 <small>Courses available</small>
               </div>
-
               <div className="stat-box">
                 <span>MARKS RECORDED</span>
                 <strong>{recordedMarks}</strong>
@@ -331,11 +257,8 @@ export default function Home() {
             <div className="table-heading">
               <div>
                 <h3>Midterm Results</h3>
-                <p>
-                  Course-wise midterm marks for Fall 2026.
-                </p>
+                <p>Course-wise midterm marks for Fall 2026.</p>
               </div>
-
               <FileText size={20} />
             </div>
 
@@ -348,31 +271,19 @@ export default function Home() {
                     <th>MIDTERM MARKS</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   {courses.map((course, index) => (
-                    <tr
-                      key={`${course.course_code}-${index}`}
-                    >
-                      <td>
-                        <strong>
-                          {course.course_code}
-                        </strong>
-                      </td>
-
+                    <tr key={`${course.course_code}-${index}`}>
+                      <td><strong>{course.course_code}</strong></td>
                       <td>{course.course_title}</td>
-
                       <td className="total-cell">
                         {displayMidterm(course)}
                       </td>
                     </tr>
                   ))}
-
                   {courses.length === 0 && (
                     <tr>
-                      <td colSpan="3">
-                        No course marks are available yet.
-                      </td>
+                      <td colSpan="3">No course marks are available yet.</td>
                     </tr>
                   )}
                 </tbody>
@@ -384,14 +295,8 @@ export default function Home() {
                 <ShieldCheck size={15} />
                 Fall 2026 · Midterm record
               </span>
-
-              <button
-                onClick={reset}
-                className="reset-button"
-                type="button"
-              >
-                <RotateCcw size={15} />
-                New search
+              <button onClick={reset} className="reset-button" type="button">
+                <RotateCcw size={15} /> New search
               </button>
             </div>
           </section>
@@ -399,43 +304,24 @@ export default function Home() {
 
         <div className="info-row">
           <div className="info-card">
-            <div className="info-icon">
-              <ShieldCheck size={20} />
-            </div>
-
+            <div className="info-icon"><ShieldCheck size={20} /></div>
             <div>
               <strong>Student-focused access</strong>
-              <p>
-                Designed for the academic records of
-                Intake 64, Section 4.
-              </p>
+              <p>Designed for the academic records of Intake 64, Section 4.</p>
             </div>
           </div>
-
           <div className="info-card">
-            <div className="info-icon">
-              <FileText size={20} />
-            </div>
-
+            <div className="info-icon"><FileText size={20} /></div>
             <div>
               <strong>Course-wise details</strong>
-              <p>
-                View available midterm assessment marks.
-              </p>
+              <p>View available midterm assessment marks.</p>
             </div>
           </div>
-
           <div className="info-card">
-            <div className="info-icon">
-              <CircleHelp size={20} />
-            </div>
-
+            <div className="info-icon"><CircleHelp size={20} /></div>
             <div>
               <strong>Need assistance?</strong>
-              <p>
-                Contact your class representative
-                for result-related queries.
-              </p>
+              <p>Contact your class representative for result-related queries.</p>
             </div>
           </div>
         </div>
@@ -445,8 +331,7 @@ export default function Home() {
             <strong>Result information</strong>
             <p>
               Only available midterm marks are displayed.
-              Other assessment marks and final CGPA are
-              not included.
+              Other assessment marks and final CGPA are not included.
             </p>
           </div>
         </div>
@@ -457,16 +342,12 @@ export default function Home() {
           <div className="footer-brand">
             BUBT <span>RESULT PORTAL</span>
           </div>
-
           <p>Intake 64 · Section 4 · Fall 2026</p>
-
           <small>
-            Independent student project prototype ·
-            Not an official university website
+            Independent student project prototype · Not an official university website
           </small>
         </div>
       </footer>
     </main>
   );
 }
-
